@@ -64,7 +64,7 @@ def _upload_qcow(name, url)
     cwd "/tmp"
     user "root"
     code <<-EOH
-        #{glance_cmd} image-create --name "#{name}" --is-public true #{c_fmt} #{d_fmt} --location "#{url}"
+        #{glance_cmd} image-create --name "#{name.to_s}" --is-public true #{c_fmt} #{d_fmt} --location "#{url}"
     EOH
     not_if "#{glance_cmd} image-list | grep #{name.to_s}"
   end
@@ -104,7 +104,7 @@ def _upload_ami(name, url)
 
         kid=$(#{glance_cmd} image-create --name "${image_name}-kernel" --is-public true #{aki_fmt} < ${kernel_file} | cut -d: -f2 | sed 's/ //')
         rid=$(#{glance_cmd} image-create --name "${image_name}-initrd" --is-public true #{ari_fmt} < ${ramdisk} | cut -d: -f2 | sed 's/ //')
-        #{glance_cmd} image-create --name "#{name}" --is-public true #{ami_fmt} --property "kernel_id=$kid" --property "ramdisk_id=$rid" < ${kernel}
+        #{glance_cmd} image-create --name "#{name.to_s}" --is-public true #{ami_fmt} --property "kernel_id=$kid" --property "ramdisk_id=$rid" < ${kernel}
     EOH
     not_if "#{glance_cmd} image-list | grep #{name.to_s}"
   end
